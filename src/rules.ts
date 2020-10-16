@@ -25,6 +25,7 @@ export const syllableRules = (syl: Syllable): string => {
   const sylIsClosed = syl.isClosed;
   let sylHasMater: boolean = false;
   let sylMaterText: string | null = null;
+  let isAccented: boolean = syl.isAccented;
 
   syl.clusters.forEach((cluster) => {
     let clusterTrans = cluster.text;
@@ -105,10 +106,13 @@ export const syllableRules = (syl: Syllable): string => {
     const qametsYod = /\u{05B8}\u{05D9}/u;
     if (threeMSSuffix.test(sylTxt)) {
       sylTrans = changeElementSplit(sylTxt, threeMSSuffix, "άβ");
+      isAccented = false;
     } else if (patchYod.test(sylTxt)) {
       sylTrans = changeElementSplit(sylTxt, patchYod, "άη");
+      isAccented = false;
     } else if (qametsYod.test(sylTxt)) {
       sylTrans = changeElementSplit(sylTxt, qametsYod, "άη");
+      isAccented = false;
     }
   }
 
@@ -127,6 +131,7 @@ export const syllableRules = (syl: Syllable): string => {
       const pluralSufx = /\u{05B4}\u{05D9}\u{05DD}/u;
       if (pluralSufx.test(sylTrans)) {
         sylTrans = changeElementSplit(sylTrans, pluralSufx, "είμ");
+        isAccented = false;
         sylMaterText = null;
       }
     } else {
@@ -136,6 +141,7 @@ export const syllableRules = (syl: Syllable): string => {
         sylTrans = changeElementSplit(sylTrans, hiriqYod, "η");
       } else if (tsereYod.test(sylTrans)) {
         sylTrans = changeElementSplit(sylTrans, tsereYod, "αί");
+        isAccented = false;
       }
       sylMaterText = null;
     }
@@ -156,6 +162,6 @@ export const syllableRules = (syl: Syllable): string => {
     sylTrans = changeElementSplit(sylTrans, doubleIota, "ι");
   }
 
-  sylTrans = syl.isAccented ? addAcute(sylTrans) : sylTrans;
+  sylTrans = isAccented ? addAcute(sylTrans) : sylTrans;
   return sylTrans;
 };
