@@ -44,7 +44,7 @@ Text.prototype.transliterate = function (): string {
     }`;
   });
   const transliteration = transliterationArr.reduce((a, c) => a + c, "");
-  return transliteration;
+  return transliteration.normalize("NFC");
 };
 
 export { Text };
